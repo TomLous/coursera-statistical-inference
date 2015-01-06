@@ -1,10 +1,5 @@
----
-author: "Tom Lous"
-date: "6 Jan 2015"
-output:
-  html_document:
-    keep_md: yes
----
+Tom Lous  
+6 Jan 2015  
 
 # Quiz 1
 ## Question 1
@@ -26,8 +21,13 @@ filling in the values:
 $.17 = .12 + P(B) - .06$
 
 $P(B) = $
-```{r}
+
+```r
  .17 - .12  + .06
+```
+
+```
+## [1] 0.11
 ```
 
 ---
@@ -41,8 +41,13 @@ A random variable, X is uniform, a box from 0 to 1 of height 1. (So that its den
 This density looks like a box. So, notice that $P(X \leq x) = width\times height = x$.
 We want 75th percentile: $.75 = P(X\leq x) = x$.
 
-```{r}
+
+```r
 qunif(p=0.75, min=0, max=1)
+```
+
+```
+## [1] 0.75
 ```
 
 ---
@@ -78,12 +83,19 @@ The median must be 0, because 50% of the probability is below 0 and 50% is above
 ## Question 5
 
 Consider the following PMF shown below in R
-```{r}
+
+```r
 x <- 1:4
 p <- x/sum(x)
 temp <- rbind(x, p)
 rownames(temp) <- c("X", "Prob")
 temp
+```
+
+```
+##      [,1] [,2] [,3] [,4]
+## X     1.0  2.0  3.0  4.0
+## Prob  0.1  0.2  0.3  0.4
 ```
 
 What is the mean? 
@@ -95,9 +107,14 @@ $\bar X = \sum\limits_{i=1}^n x_ip(x_i)$
 
 The mean is the sum of the x and with it's related probability
 
-```{r}
+
+```r
 Xmean <- sum(temp["X",] * temp["Prob",])
 Xmean
+```
+
+```
+## [1] 3
 ```
 
 ---
@@ -142,7 +159,12 @@ $P(pregnant\:\vert\: +) = \frac{0.75 \times 0.30}{0.75 \times 0.30 \:+\:0.48 \ti
 
 
 
-```{r}
+
+```r
 Ppregnant_pos = 0.75*0.30/(0.75*0.30+0.48*0.70)
 round(Ppregnant_pos*100)
+```
+
+```
+## [1] 40
 ```
