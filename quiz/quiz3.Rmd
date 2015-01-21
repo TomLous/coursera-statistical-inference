@@ -104,3 +104,22 @@ confidenceInterval <- μ_y - μ_x + c(-1, 1) * qt(quantile, df=n_y+n_x-2) * σ_p
 round(confidenceInterval,2)
 ```
 ---
+
+## Question 5
+
+Suppose that you create a 95% T confidence interval. You then create a 90% interval using the same data. What can be said about the 90% interval with respect to the 95% interval?
+
+### Answer
+
+* The interval will be the same width, but shifted.
+* **The interval will be narrower.**
+* The interval will be wider
+* It is impossible to tell.
+
+---
+
+## Question 6
+
+To further test the hospital triage system, administrators selected 200 nights and randomly assigned a new triage system to be used on 100 nights and a standard system on the remaining 100 nights. They calculated the nightly median waiting time (MWT) to see a physician. The average MWT for the new system was 4 hours with a standard deviation of 0.5 hours while the average MWT for the old system was 6 hours with a standard deviation of 2 hours. Consider the hypothesis of a decrease in the mean MWT associated with the new treatment. What does the 95% independent group confidence interval with unequal variances suggest vis a vis this hypothesis? (Because there's so many observations per group, just use the Z quantile instead of the T.)
+
+### Answer
