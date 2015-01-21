@@ -76,6 +76,23 @@ confidenceInterval</code></pre>
 <hr />
 </div>
 </div>
+<div id="question-2" class="section level2">
+<h2>Question 2</h2>
+<p>A diet pill is given to 9 subjects over six weeks. The average difference in weight (follow up - baseline) is -2 pounds. What would the standard deviation of the difference in weight have to be for the upper endpoint of the 95% T confidence interval to touch 0?</p>
+<div id="answer-1" class="section level3">
+<h3>Answer</h3>
+<p>Interval <span class="math">\(CI_{up} = \bar X + t_{n-1} S / \sqrt{n}\)</span>, where <span class="math">\(t_{n-1}\)</span> is the relevant quantile</p>
+<p>Rewritten, to get standard deviation: <span class="math">\(S = \frac{CI_{up} - \bar X * \sqrt{n}}{t_{n-1}}\)</span></p>
+<pre class="r"><code>n &lt;- 9
+averageDifference &lt;- -2
+quantile = 0.975 # is 95% with 2.5% on both sides of the range
+ci_up = 0
+σ = (ci_up - averageDifference * sqrt(n))/qt(quantile, df=n-1)
+round(σ, 2)</code></pre>
+<pre><code>## [1] 2.6</code></pre>
+<hr />
+</div>
+</div>
 </div>
 
 
