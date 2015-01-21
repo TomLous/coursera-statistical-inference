@@ -57,3 +57,16 @@ round(σ, 2)
 ```
 
 ---
+
+## Question 3
+
+In an effort to improve running performance, 5 runners were either given a protein supplement or placebo. Then, after a suitable washout period, they were given the opposite treatment. Their mile times were recorded under both the treatment and placebo, yielding 10 measurements with 2 per subject. The researchers intend to use a T test and interval to investigate the treatment. Should they use a paired or independent group T test and interval?
+
+### Answer
+
+* A paired interval
+* You could use either
+* It's necessary to use both
+* **Independent groups, since all subjects were seen under both systems**
+
+---
