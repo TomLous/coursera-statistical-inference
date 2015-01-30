@@ -11,7 +11,7 @@
 
 <meta name="author" content="Tom Lous" />
 
-<meta name="date" content="2015-01-19" />
+<meta name="date" content="2015-01-29" />
 
 <title></title>
 
@@ -55,13 +55,75 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 
 
-<div id="quiz-3" class="section level1">
-<h1>Quiz 3</h1>
+<div id="quiz-4" class="section level1">
+<h1>Quiz 4</h1>
 <div id="question-1" class="section level2">
 <h2>Question 1</h2>
-<p>In a population of interest, a sample of 9 men yielded a sample average brain volume of 1,100cc and a standard deviation of 30cc. What is a 95% Student’s T confidence interval for the mean brain volume in this new population?</p>
+<p>A pharmaceutical company is interested in testing a potential blood pressure lowering medication. Their first examination considers only subjects that received the medication at baseline then two weeks later. The data are as follows (SBP in mmHg)</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Subject</th>
+<th align="left">Baseline</th>
+<th align="left">Week 2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">140</td>
+<td align="left">132</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">138</td>
+<td align="left">135</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="left">150</td>
+<td align="left">151</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="left">148</td>
+<td align="left">146</td>
+</tr>
+<tr class="odd">
+<td align="left">5</td>
+<td align="left">135</td>
+<td align="left">130</td>
+</tr>
+</tbody>
+</table>
+<p>Consider testing the hypothesis that there was a mean reduction in blood pressure? Give the P-value for the associated two sided T test.</p>
+<p>(Hint, consider</p>
 <div id="answer" class="section level3">
 <h3>Answer</h3>
+<pre class="r"><code>subject &lt;- c(1,2,3,4,5)
+baseline &lt;- c(140,138,150,148,135)
+week2 &lt;- c(132,135,151,146,130)
+examinations &lt;- data.frame(subject, baseline, week2)
+examinations</code></pre>
+<pre><code>##   subject baseline week2
+## 1       1      140   132
+## 2       2      138   135
+## 3       3      150   151
+## 4       4      148   146
+## 5       5      135   130</code></pre>
+<pre class="r"><code>test &lt;- t.test(x = examinations$baseline, y = examinations$week2, alt = &quot;two.sided&quot;, paired = TRUE)
+pval &lt;- test$p.value
+round(pval,3)</code></pre>
+<pre><code>## [1] 0.087</code></pre>
+<hr />
+</div>
+</div>
+<div id="question-2" class="section level2">
+<h2>Question 2</h2>
+<p>A sample of 9 men yielded a sample average brain volume of 1,100cc and a standard deviation of 30cc. What is the complete set of values of μ0 that a test of <span class="math">\(H_0:μ=μ_0\)</span> would fail to reject the null hypothesis in a two sided 5% Students t-test?</p>
+<div id="answer-1" class="section level3">
+<h3>Answer</h3>
+<p>This is the inversion of a one sided hypothesis test. It yields confidence bounds. (Note inverting a two sidded test yields confidence intervals.) Think about the derivation of the confidence interval.</p>
 <p>Assuming underlying data is iid gaussian</p>
 <p><span class="math">\(\frac{\bar X - μ}{S / \sqrt{n}}\)</span></p>
 <p>follows Gosset’s <span class="math">\(t\)</span> distibution with <span class="math">\(n-1\)</span> degrees of freedom</p>
@@ -76,118 +138,39 @@ confidenceInterval</code></pre>
 <hr />
 </div>
 </div>
-<div id="question-2" class="section level2">
-<h2>Question 2</h2>
-<p>A diet pill is given to 9 subjects over six weeks. The average difference in weight (follow up - baseline) is -2 pounds. What would the standard deviation of the difference in weight have to be for the upper endpoint of the 95% T confidence interval to touch 0?</p>
-<div id="answer-1" class="section level3">
-<h3>Answer</h3>
-<p>Interval <span class="math">\(CI_{up} = \bar X + t_{n-1} S / \sqrt{n}\)</span>, where <span class="math">\(t_{n-1}\)</span> is the relevant quantile</p>
-<p>Rewritten, to get standard deviation: <span class="math">\(S = \frac{CI_{up} - \bar X * \sqrt{n}}{t_{n-1}}\)</span></p>
-<pre class="r"><code>n &lt;- 9
-averageDifference &lt;- -2
-quantile = 0.975 # is 95% with 2.5% on both sides of the range
-ci_up = 0
-σ = (ci_up - averageDifference * sqrt(n))/qt(quantile, df=n-1)
-round(σ, 2)</code></pre>
-<pre><code>## [1] 2.6</code></pre>
-<hr />
-</div>
-</div>
 <div id="question-3" class="section level2">
 <h2>Question 3</h2>
-<p>In an effort to improve running performance, 5 runners were either given a protein supplement or placebo. Then, after a suitable washout period, they were given the opposite treatment. Their mile times were recorded under both the treatment and placebo, yielding 10 measurements with 2 per subject. The researchers intend to use a T test and interval to investigate the treatment. Should they use a paired or independent group T test and interval?</p>
+<p>Researchers conducted a blind taste test of Coke versus Pepsi. Each of four people was asked which of two blinded drinks given in random order that they preferred. The data was such that 3 of the 4 people chose Coke. Assuming that this sample is representative, report a P-value for a test of the hypothesis that Coke is preferred to Pepsi using a one sided exact test.</p>
 <div id="answer-2" class="section level3">
 <h3>Answer</h3>
-<ul>
-<li><strong>A paired interval</strong></li>
-<li>You could use either</li>
-<li>It’s necessary to use both</li>
-<li>Independent groups, since all subjects were seen under both systems</li>
-</ul>
+<pre class="r"><code>n &lt;- 4
+x &lt;- 3
+test &lt;- binom.test(x=x, n=n, alt=&quot;greater&quot;)
+round(test$p.value,2)</code></pre>
+<pre><code>## [1] 0.31</code></pre>
 <hr />
 </div>
 </div>
 <div id="question-4" class="section level2">
 <h2>Question 4</h2>
-<p>In a study of emergency room waiting times, investigators consider a new and the standard triage systems. To test the systems, administrators selected 20 nights and randomly assigned the new triage system to be used on 10 nights and the standard system on the remaining 10 nights. They calculated the nightly median waiting time (MWT) to see a physician. The average MWT for the new system was 3 hours with a variance of 0.60 while the average MWT for the old system was 5 hours with a variance of 0.68. Consider the 95% confidence interval estimate for the differences of the mean MWT associated with the new system. Assume a constant variance. What is the interval? Subtract in this order (New System - Old System).</p>
+<p>Infection rates at a hospital above 1 infection per 100 person days at risk are believed to be too high and are used as a benchmark. A hospital that had previously been above the benchmark recently had 10 infections over the last 1,787 person days at risk. About what is the one sided P-value for the relevant test of whether the hospital is <em>below</em> the standard?</p>
 <div id="answer-3" class="section level3">
 <h3>Answer</h3>
-<p>Independent group T intervals</p>
-<p>A <span class="math">\((1 - a) \times 100%\)</span> confidence interval for <span class="math">\(μ_y - μ_x\)</span> is</p>
-<p><span class="math">\(\bar Y - \bar X \pm t_{n_x + n_y - 2, 1 - α/2} S_p\left(\frac{1}{n_x} + \frac{1}{n_y}\right)^{1/2}\)</span></p>
-<p>The pooled variance estimator is:</p>
-<p><span class="math">\(S_p^2 = \{(n_x - 1) S_x^2 + (n_y - 1) S_y^2\}/(n_x + n_y - 2)\)</span></p>
-<p>Rewritten for available variables:</p>
-<p><span class="math">\(S_p = \sqrt{\{(n_x - 1) var_x + (n_y - 1) var_y\}/(n_x + n_y - 2)}\)</span></p>
-<pre class="r"><code>quantile = 0.975 # is 95% with 2.5% on both sides of the range
-
-n_y &lt;- 10 # nights new system
-n_x &lt;- 10 # nights old system
-var_y &lt;- 0.60 # variance new (sqrt of σ)
-var_x &lt;- 0.68 # variance old (sqrt of σ)
-μ_y &lt;- 3# average hours new system
-μ_x &lt;- 5# average hours old system
-
-# calculate pooled standard deviation
-σ_p &lt;- sqrt(((n_x - 1) * var_x + (n_y - 1) * var_y)/(n_x + n_y - 2))
-
-confidenceInterval &lt;- μ_y - μ_x + c(-1, 1) * qt(quantile, df=n_y+n_x-2) * σ_p * (1 / n_x + 1 / n_y)^.5
-round(confidenceInterval,2)</code></pre>
-<pre><code>## [1] -2.75 -1.25</code></pre>
+<pre class="r"><code>rate &lt;- 1/100
+errors &lt;- 10
+days &lt;- 1787
+test &lt;-  poisson.test(errors, T = days, r = rate, alt=&quot;less&quot;)
+round(test$p.value,2)</code></pre>
+<pre><code>## [1] 0.03</code></pre>
 <hr />
 </div>
 </div>
 <div id="question-5" class="section level2">
 <h2>Question 5</h2>
-<p>Suppose that you create a 95% T confidence interval. You then create a 90% interval using the same data. What can be said about the 90% interval with respect to the 95% interval?</p>
+<p>Suppose that 18 obese subjects were randomized, 9 each, to a new diet pill and a placebo. Subjects’ body mass indices (BMIs) were measured at a baseline and again after having received the treatment or placebo for four weeks. The average difference from follow-up to the baseline (followup - baseline) was −3 kg/m2 for the treated group and 1 kg/m2 for the placebo group. The corresponding standard deviations of the differences was 1.5 kg/m2 for the treatment group and 1.8 kg/m2 for the placebo group. Does the change in BMI appear to differ between the treated and placebo groups? Assuming normality of the underlying data and a common population variance, give a pvalue for a two sided t test.</p>
 <div id="answer-4" class="section level3">
 <h3>Answer</h3>
-<ul>
-<li>The interval will be the same width, but shifted.</li>
-<li><strong>The interval will be narrower.</strong></li>
-<li>The interval will be wider</li>
-<li>It is impossible to tell.</li>
-</ul>
-<hr />
-</div>
-</div>
-<div id="question-6" class="section level2">
-<h2>Question 6</h2>
-<p>To further test the hospital triage system, administrators selected 200 nights and randomly assigned a new triage system to be used on 100 nights and a standard system on the remaining 100 nights. They calculated the nightly median waiting time (MWT) to see a physician. The average MWT for the new system was 4 hours with a standard deviation of 0.5 hours while the average MWT for the old system was 6 hours with a standard deviation of 2 hours. Consider the hypothesis of a decrease in the mean MWT associated with the new treatment. What does the 95% independent group confidence interval with unequal variances suggest vis a vis this hypothesis? (Because there’s so many observations per group, just use the Z quantile instead of the T.)</p>
-<div id="answer-5" class="section level3">
-<h3>Answer</h3>
-<pre class="r"><code>quantile = 0.975 # is 95% with 2.5% on both sides of the range
-
-n_y &lt;- 100 # nights new system
-n_x &lt;- 100 # nights old system
-σ_y &lt;- 0.50# σ new 
-σ_x &lt;- 2# σ old 
-μ_y &lt;- 4# average hours new system
-μ_x &lt;- 6# average hours old system
-
-# calculate pooled standard deviation
-σ_p &lt;- sqrt(((n_x - 1) * σ_x^2 + (n_y - 1) * σ_y^2)/(n_x + n_y - 2))
-
-confidenceInterval &lt;-  μ_x - μ_y + c(-1, 1) * qnorm(quantile) * σ_p * (1 / n_x + 1 / n_y)^.5
-round(confidenceInterval,2)</code></pre>
-<pre><code>## [1] 1.6 2.4</code></pre>
-<ul>
-<li>When subtracting (old - new) the interval is entirely above zero. The new system does not appear to be effective.</li>
-<li>When subtracting (old - new) the interval contains 0. There is not evidence suggesting that the new system is effective.</li>
-<li><strong>When subtracting (old - new) the interval is entirely above zero. The new system appears to be effective.</strong></li>
-<li>When subtracting (old - new) the interval contains 0. The new system appears to be effective.</li>
-</ul>
-<hr />
-</div>
-</div>
-<div id="question-7" class="section level2">
-<h2>Question 7</h2>
-<p>Suppose that 18 obese subjects were randomized, 9 each, to a new diet pill and a placebo. Subjects’ body mass indices (BMIs) were measured at a baseline and again after having received the treatment or placebo for four weeks. The average difference from follow-up to the baseline (followup - baseline) was −3 kg/m2 for the treated group and 1 kg/m2 for the placebo group. The corresponding standard deviations of the differences was 1.5 kg/m2 for the treatment group and 1.8 kg/m2 for the placebo group. Does the change in BMI over the four week period appear to differ between the treated and placebo groups? Assuming normality of the underlying data and a common population variance, calculate the relevant <em>90%</em> t confidence interval. Subtract in the order of (Treated - Placebo) with the smaller (more negative) number first.</p>
-<div id="answer-6" class="section level3">
-<h3>Answer</h3>
-<pre class="r"><code>quantile = 0.95 # is 90% with 5% on both sides of the range
-
-n_y &lt;- 9 # subjects treated
+<pre class="r"><code>n_y &lt;- 9 # subjects treated
 n_x &lt;- 9 # subjects placebo
 σ_y &lt;- 1.5# kg/m2 std.dev. treated 
 σ_x &lt;- 1.8# kg/m2 std.dev. placebo 
@@ -195,11 +178,77 @@ n_x &lt;- 9 # subjects placebo
 μ_x &lt;- 1#  kg/m2 average difference placebo
 
 # calculate pooled standard deviation
-σ_p &lt;- sqrt(((n_x - 1) * σ_x^2 + (n_y - 1) * σ_y^2)/(n_x + n_y - 2))
+σ_p &lt;- (((n_x - 1) * σ_x^2 + (n_y - 1) * σ_y^2)/(n_x + n_y - 2))
+pval &lt;- pt((μ_y - μ_x) / (σ_p * (1 / n_x + 1 / n_y)^.5), df=n_y + n_x -2)
+pval</code></pre>
+<pre><code>## [1] 0.003504</code></pre>
+<ul>
+<li>Larger than 0.10</li>
+<li>Less than 0.05, but larger than 0.01</li>
+<li>Less than 0.10 but larger than 0.05</li>
+<li><strong>Less than 0.01</strong></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="question-6" class="section level2">
+<h2>Question 6</h2>
+<p>Brain volumes for 9 men yielded a 90% confidence interval of 1,077 cc to 1,123 cc. Would you reject in a two sided 5% hypothesis test of <span class="math">\(H_0:μ=1,078\)</span>?</p>
+<div id="answer-5" class="section level3">
+<h3>Answer</h3>
+<p><span class="math">\(H_0:μ=1,078\)</span> falls in the 1077- 1123 range. So no.</p>
+<ul>
+<li>It’s impossible to tell.</li>
+<li>Where does Brian come up with these questions?</li>
+<li>Yes you would reject.</li>
+<li><strong>No you wouldn’t reject.</strong></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="question-7" class="section level2">
+<h2>Question 7</h2>
+<p>Researchers would like to conduct a study of 100 healthy adults to detect a four year mean brain volume loss of .01 mm3. Assume that the standard deviation of four year volume loss in this population is .04 mm3. About what would be the power of the study for a 5% one sided test versus a null hypothesis of no volume loss?</p>
+<div id="answer-6" class="section level3">
+<h3>Answer</h3>
+<pre class="r"><code>n &lt;- 100 #subject
+μ &lt;- 0.01# m^3 brain volume loss mean
+σ &lt;- 0.04# m^3 brain volume loss std. dev.
+p &lt;- 0.05 # sign level
 
-confidenceInterval &lt;-  μ_y - μ_x + c(-1, 1) * qt(quantile, df=n_y+n_x-2) * σ_p * (1 / n_x + 1 / n_y)^.5
-round(confidenceInterval,3)</code></pre>
-<pre><code>## [1] -5.364 -2.636</code></pre>
+pow &lt;- power.t.test(n=n, delta=μ, sd=σ , sig.level=p, type=&quot;one.sample&quot;, alt=&quot;one.sided&quot;)$power
+round(pow, 2)</code></pre>
+<pre><code>## [1] 0.8</code></pre>
+<hr />
+</div>
+</div>
+<div id="question-8" class="section level2">
+<h2>Question 8</h2>
+<p>Researchers would like to conduct a study of n healthy adults to detect a four year mean brain volume loss of .01 mm3. Assume that the standard deviation of four year volume loss in this population is .04 mm3. About what would be the value of n needded for 90% power of type one error rate of 5% one sided test versus a null hypothesis of no volume loss?</p>
+<div id="answer-7" class="section level3">
+<h3>Answer</h3>
+<pre class="r"><code>μ &lt;- 0.01# m^3 brain volume loss mean
+σ &lt;- 0.04# m^3 brain volume loss std. dev.
+p &lt;- 0.05 # sign level
+pow &lt;- 0.9 #power
+
+n &lt;- power.t.test(power=pow, delta=μ, sd=σ , sig.level=p, type=&quot;one.sample&quot;, alt=&quot;one.sided&quot;)$n
+ceiling(n/10)*10</code></pre>
+<pre><code>## [1] 140</code></pre>
+<hr />
+</div>
+</div>
+<div id="question-9" class="section level2">
+<h2>Question 9</h2>
+<p>As you increase the type one error rate, α, what happens to power?</p>
+<div id="answer-8" class="section level3">
+<h3>Answer</h3>
+<ul>
+<li>It’s impossible to tell given the information in the problem.</li>
+<li>You will get smaller power.</li>
+<li><strong>You will get larger power.</strong></li>
+<li>No, for real, where does Brian come up with these problems?</li>
+</ul>
 </div>
 </div>
 </div>
