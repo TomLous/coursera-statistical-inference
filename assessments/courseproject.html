@@ -10,7 +10,6 @@
 
 <meta name="author" content="Tom Lous" />
 
-<meta name="date" content="2015-01-29" />
 
 <title></title>
 
@@ -63,201 +62,60 @@ img {
 
 
 
-<div id="quiz-4" class="section level1">
-<h1>Quiz 4</h1>
-<div id="question-1" class="section level2">
-<h2>Question 1</h2>
-<p>A pharmaceutical company is interested in testing a potential blood pressure lowering medication. Their first examination considers only subjects that received the medication at baseline then two weeks later. The data are as follows (SBP in mmHg)</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Subject</th>
-<th align="left">Baseline</th>
-<th align="left">Week 2</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">140</td>
-<td align="left">132</td>
-</tr>
-<tr class="even">
-<td align="left">2</td>
-<td align="left">138</td>
-<td align="left">135</td>
-</tr>
-<tr class="odd">
-<td align="left">3</td>
-<td align="left">150</td>
-<td align="left">151</td>
-</tr>
-<tr class="even">
-<td align="left">4</td>
-<td align="left">148</td>
-<td align="left">146</td>
-</tr>
-<tr class="odd">
-<td align="left">5</td>
-<td align="left">135</td>
-<td align="left">130</td>
-</tr>
-</tbody>
-</table>
-<p>Consider testing the hypothesis that there was a mean reduction in blood pressure? Give the P-value for the associated two sided T test.</p>
-<p>(Hint, consider</p>
-<div id="answer" class="section level3">
-<h3>Answer</h3>
-<pre class="r"><code>subject &lt;- c(1,2,3,4,5)
-baseline &lt;- c(140,138,150,148,135)
-week2 &lt;- c(132,135,151,146,130)
-examinations &lt;- data.frame(subject, baseline, week2)
-examinations</code></pre>
-<pre><code>##   subject baseline week2
-## 1       1      140   132
-## 2       2      138   135
-## 3       3      150   151
-## 4       4      148   146
-## 5       5      135   130</code></pre>
-<pre class="r"><code>test &lt;- t.test(x = examinations$baseline, y = examinations$week2, alt = &quot;two.sided&quot;, paired = TRUE)
-pval &lt;- test$p.value
-round(pval,3)</code></pre>
-<pre><code>## [1] 0.087</code></pre>
-<hr />
+<div id="statistical-inference-course-project" class="section level1">
+<h1>Statistical Inference Course Project</h1>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>In this project I will investigate the exponential distribution in R and compare it with the Central Limit Theorem. The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. I will set lambda = 0.2 for all of the simulations. I will investigate the distribution of averages of 40 exponentials. Note that I will need to do a thousand simulations.</p>
 </div>
-</div>
-<div id="question-2" class="section level2">
-<h2>Question 2</h2>
-<p>A sample of 9 men yielded a sample average brain volume of 1,100cc and a standard deviation of 30cc. What is the complete set of values of μ0 that a test of <span class="math">\(H_0:μ=μ_0\)</span> would fail to reject the null hypothesis in a two sided 5% Students t-test?</p>
-<div id="answer-1" class="section level3">
-<h3>Answer</h3>
-<p>This is the inversion of a one sided hypothesis test. It yields confidence bounds. (Note inverting a two sidded test yields confidence intervals.) Think about the derivation of the confidence interval.</p>
-<p>Assuming underlying data is iid gaussian</p>
-<p><span class="math">\(\frac{\bar X - μ}{S / \sqrt{n}}\)</span></p>
-<p>follows Gosset’s <span class="math">\(t\)</span> distibution with <span class="math">\(n-1\)</span> degrees of freedom</p>
-<p>Interval <span class="math">\(\bar X \pm t_{n-1} S / \sqrt{n}\)</span>, where <span class="math">\(t_{n-1}\)</span> is the relevant quantile</p>
-<pre class="r"><code>n &lt;- 9
-μ &lt;- 1100
-σ &lt;- 30
-quantile = 0.975 # is 95% with 2.5% on both sides of the range
-confidenceInterval = μ + c(-1, 1) * qt(quantile, df=n-1) * σ / sqrt(n)
-confidenceInterval</code></pre>
-<pre><code>## [1] 1076.94 1123.06</code></pre>
-<hr />
-</div>
-</div>
-<div id="question-3" class="section level2">
-<h2>Question 3</h2>
-<p>Researchers conducted a blind taste test of Coke versus Pepsi. Each of four people was asked which of two blinded drinks given in random order that they preferred. The data was such that 3 of the 4 people chose Coke. Assuming that this sample is representative, report a P-value for a test of the hypothesis that Coke is preferred to Pepsi using a one sided exact test.</p>
-<div id="answer-2" class="section level3">
-<h3>Answer</h3>
-<pre class="r"><code>n &lt;- 4
-x &lt;- 3
-test &lt;- binom.test(x=x, n=n, alt=&quot;greater&quot;)
-round(test$p.value,2)</code></pre>
-<pre><code>## [1] 0.31</code></pre>
-<hr />
-</div>
-</div>
-<div id="question-4" class="section level2">
-<h2>Question 4</h2>
-<p>Infection rates at a hospital above 1 infection per 100 person days at risk are believed to be too high and are used as a benchmark. A hospital that had previously been above the benchmark recently had 10 infections over the last 1,787 person days at risk. About what is the one sided P-value for the relevant test of whether the hospital is <em>below</em> the standard?</p>
-<div id="answer-3" class="section level3">
-<h3>Answer</h3>
-<pre class="r"><code>rate &lt;- 1/100
-errors &lt;- 10
-days &lt;- 1787
-test &lt;-  poisson.test(errors, T = days, r = rate, alt=&quot;less&quot;)
-round(test$p.value,2)</code></pre>
-<pre><code>## [1] 0.03</code></pre>
-<hr />
-</div>
-</div>
-<div id="question-5" class="section level2">
-<h2>Question 5</h2>
-<p>Suppose that 18 obese subjects were randomized, 9 each, to a new diet pill and a placebo. Subjects’ body mass indices (BMIs) were measured at a baseline and again after having received the treatment or placebo for four weeks. The average difference from follow-up to the baseline (followup - baseline) was −3 kg/m2 for the treated group and 1 kg/m2 for the placebo group. The corresponding standard deviations of the differences was 1.5 kg/m2 for the treatment group and 1.8 kg/m2 for the placebo group. Does the change in BMI appear to differ between the treated and placebo groups? Assuming normality of the underlying data and a common population variance, give a pvalue for a two sided t test.</p>
-<div id="answer-4" class="section level3">
-<h3>Answer</h3>
-<pre class="r"><code>n_y &lt;- 9 # subjects treated
-n_x &lt;- 9 # subjects placebo
-σ_y &lt;- 1.5# kg/m2 std.dev. treated 
-σ_x &lt;- 1.8# kg/m2 std.dev. placebo 
-μ_y &lt;- -3#  kg/m2 average difference treated
-μ_x &lt;- 1#  kg/m2 average difference placebo
+<div id="simulations" class="section level2">
+<h2>Simulations</h2>
+<pre class="r"><code># load neccesary libraries
+library(ggplot2)
 
-# calculate pooled standard deviation
-σ_p &lt;- (((n_x - 1) * σ_x^2 + (n_y - 1) * σ_y^2)/(n_x + n_y - 2))
-pval &lt;- pt((μ_y - μ_x) / (σ_p * (1 / n_x + 1 / n_y)^.5), df=n_y + n_x -2)
-pval</code></pre>
-<pre><code>## [1] 0.003504094</code></pre>
-<ul>
-<li>Larger than 0.10</li>
-<li>Less than 0.05, but larger than 0.01</li>
-<li>Less than 0.10 but larger than 0.05</li>
-<li><strong>Less than 0.01</strong></li>
-</ul>
-<hr />
-</div>
-</div>
-<div id="question-6" class="section level2">
-<h2>Question 6</h2>
-<p>Brain volumes for 9 men yielded a 90% confidence interval of 1,077 cc to 1,123 cc. Would you reject in a two sided 5% hypothesis test of <span class="math">\(H_0:μ=1,078\)</span>?</p>
-<div id="answer-5" class="section level3">
-<h3>Answer</h3>
-<p><span class="math">\(H_0:μ=1,078\)</span> falls in the 1077- 1123 range. So no.</p>
-<ul>
-<li>It’s impossible to tell.</li>
-<li>Where does Brian come up with these questions?</li>
-<li>Yes you would reject.</li>
-<li><strong>No you wouldn’t reject.</strong></li>
-</ul>
-<hr />
-</div>
-</div>
-<div id="question-7" class="section level2">
-<h2>Question 7</h2>
-<p>Researchers would like to conduct a study of 100 healthy adults to detect a four year mean brain volume loss of .01 mm3. Assume that the standard deviation of four year volume loss in this population is .04 mm3. About what would be the power of the study for a 5% one sided test versus a null hypothesis of no volume loss?</p>
-<div id="answer-6" class="section level3">
-<h3>Answer</h3>
-<pre class="r"><code>n &lt;- 100 #subject
-μ &lt;- 0.01# m^3 brain volume loss mean
-σ &lt;- 0.04# m^3 brain volume loss std. dev.
-p &lt;- 0.05 # sign level
+# set constants
+λ &lt;- 0.2# lambda for rexp
+n &lt;- 40 # number of exponetials
+numberOfSimulations &lt;- 1000 # number of tests
 
-pow &lt;- power.t.test(n=n, delta=μ, sd=σ , sig.level=p, type=&quot;one.sample&quot;, alt=&quot;one.sided&quot;)$power
-round(pow, 2)</code></pre>
-<pre><code>## [1] 0.8</code></pre>
-<hr />
-</div>
-</div>
-<div id="question-8" class="section level2">
-<h2>Question 8</h2>
-<p>Researchers would like to conduct a study of n healthy adults to detect a four year mean brain volume loss of .01 mm3. Assume that the standard deviation of four year volume loss in this population is .04 mm3. About what would be the value of n needded for 90% power of type one error rate of 5% one sided test versus a null hypothesis of no volume loss?</p>
-<div id="answer-7" class="section level3">
-<h3>Answer</h3>
-<pre class="r"><code>μ &lt;- 0.01# m^3 brain volume loss mean
-σ &lt;- 0.04# m^3 brain volume loss std. dev.
-p &lt;- 0.05 # sign level
-pow &lt;- 0.9 #power
+# set the seed to create reproducability
+set.seed(19790811)
 
-n &lt;- power.t.test(power=pow, delta=μ, sd=σ , sig.level=p, type=&quot;one.sample&quot;, alt=&quot;one.sided&quot;)$n
-ceiling(n/10)*10</code></pre>
-<pre><code>## [1] 140</code></pre>
-<hr />
+# run the test resulting in n x numberOfSimulations matrix
+exponentialDistributions &lt;- matrix(data=rexp(n * numberOfSimulations, λ), nrow=numberOfSimulations)
+exponentialDistributionMeans &lt;- data.frame(means=apply(exponentialDistributions, 1, mean))
+
+# plot the means
+ggplot(data = exponentialDistributionMeans, aes(x = means)) + 
+  geom_histogram(binwidth=0.1, aes(y = ..density..)) + 
+  #geom_density(colour=&quot;red&quot;, size=0.8, fill=&quot;red&quot;, alpha=0.1) +
+  scale_x_continuous(breaks=round(seq(min(exponentialDistributionMeans$means), max(exponentialDistributionMeans$means), by=1)))</code></pre>
+<p><img src="data:image/png;base64,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bh+fNWW1j+2mzNtOme2j7ez786nXv9fG506Z37f9bXveGakjAmig9dZtHr+IIwBt27atf1tnC15d2SC2bNnS7183LWh+1osV7v39ZdaKtlfezL1tW61oV6N1xhdZbDdlDP/RGxHv27LaxxdZWdteea+Wtf1lto/3avizb/RTLr/5wj56n8toHzmhXg5qRCo+c/McnISUp6ayCBAgQIAAAQIE6goIoHWJzECAAAECBAgQIJCngACap6ayCBAgQIAAAQIE6goIoHWJzECAAAECBAgQIJCngACap6ayCBAgQIAAAQIE6goIoHWJzECAAAECBAgQIJCngACap6ayCBAgQIAAAQIE6goIoHWJzECAAAECBAgQIJCngACap6ayCBAgQIAAAQIE6goIoHWJzECAAAECBAgQIJCngACap6ayCBAgQIAAAQIE6goIoHWJzECAAAECBAgQIJCngACap6ayCBAgQIAAAQIE6goIoHWJzECAAAECBAgQIJCngACap6ayCBAgQIAAAQIE6goMrTuHGQgQIFCwwKxZs+rW+POf/7zuPGYgQIAAgfYU0APanutFqwgQIECAAAECA1ZAAB2wq9aCESBAgAABAgTaU0AAbc/1olUECBAgQIAAgQErIIAO2FVrwQgQIECAAAEC7SkggLbnetEqAgQIECBAgMCAFRBAB+yqtWAECBAgQIAAgfYUEEDbc71oFQECBAgQIEBgwAoIoAN21VowAgQIECBAgEB7Cgig7bletIoAAQIECBAgMGAFBNABu2otGAECBAgQIECgPQXcirM914tWESBQR+DYY4+tM8efJy9YsKCh+cxEgAABAsUJ6AEtzlpNBAgQIECAAAECfxIQQG0GBAgQIECAAAEChQoIoIVyq4wAAQIECBAgQEAAtQ0QIECAAAECBAgUKiCAFsqtMgIECBAgQIAAAQHUNkCAAAECBAgQIFCogABaKLfKCBAgQIAAAQIEBFDbAAECBAgQIECAQKECAmih3CojQIAAAQIECBAQQG0DBAgQIECAAAEChQoIoIVyq4wAAQIECBAgQEAAtQ0QIECAAAECBAgUKiCAFsqtMgIECBAgQIAAAQHUNkCAAAECBAgQIFCogABaKLfKCBAgQIAAAQIEBFDbAAECBAgQIECAQKECAmih3CojQIAAAQIECBAQQG0DBAgQIECAAAEChQoIoIVyq4wAAQIECBAgQEAAtQ0QIECAAAECBAgUKiCAFsqtMgIECBAgQIAAAQHUNkCAAAECBAgQIFCoQFsE0PXr16dnn3227oLv2rUrPf3002nHjh115zUDAQIECBAgQIBAewoMbWWztmzZkubPn59WrFiRNm7cmE466aQ0e/bsNGjQoD2a9fvf/z5df/31acSIEWnDhg3pZS97WTr99NP3mM8TBAgQIECAAAEC7S3Q0gB69913p3322SddfPHFae3atenaa69NRx99dJo+fXqVWvR8fvnLX05nnHFGOuWUU9Lq1avTJz7xiXTCCSekCRMmVM1rhAABAgQIECBAoL0FWroLfvHixenUU09Nw4YNS/vuu28WKBctWrSH2LJly9K2bduy8BkTJ02alD7wgQ+kMWPG7DGvJwgQIECAAAECBNpboGU9oHEc55o1a9LkyZO7hCJYLl++vGu88mDlypVp6tSp6Z577kkPPPBAGjlyZDrzzDPTMcccU5ml6+9tt92Wnnzyya7xeBBB9fzzz696rvvI4MF/zuE7d+7s/nQpHg8ZMiRrZwT46Cku2xDtD/cytn3o0D+/fWLbLOMQ9rEHooz2ffFux/UT205Zf0APHz48O0yqHV0b2S7KbB9tj/ct+0bWdL7zhHu8Z2P7L9sQhzVGzonP+/4M0RGY59CyHtA48Si++CJMVoZ4vGnTpspo199169al6AWN17zjHe/Iekq/9KUvZb2iXTP934NA7unf7vPtPj7Qv4R3X952Gefe2jXBvzX+3FvjHrWyZ986gdbU3K7bfMt6QCu//jdv3tz1iyLOhB8/fvweayiCafzye+1rX5vtrp82bVr6yU9+kpYsWZJmzJhRNf8555xTNV4ZefTRRysP9/gbv2hiBeWd7veoqAlPjBo1Ku23336lvTpArNtwL+OVDeLXZPTax0l0ZRxGjx6dXX2iXT+c8jJtx/UTn39x4mUZhylTpmS9cO3o2ohnme3333//7PMyrgZTxqHM9gcddFD2no09t2Ubogc0vmsbudpQb8sWWamnjNbba3qb1rIe0Djuc+zYsWnVqlVd7YvH3XfJVyZMnDgxRdCK11SGGI+z4Q0ECBAgQIAAAQLlEmhZAA2mE088MS1cuDBL5XHc5oMPPtjVoxmXaHrkkUeyX3txrGf0kD300EOZblyS6bHHHktHHXVUubS1lgABAgQIECBAILVsF3zYz5w5M7u256WXXprt0nnJS16SjjjiiGy1xKWW5s2bly677LIUPaBvectbsksx3XHHHVlgveCCC1LsijcQIECAAAECBAiUS6ClATSOB5kzZ062Kz12qcdZZpUhjnW55pprKqPp8MMPz8JonJAUu+4rZ653zeABAQIECBAgQIBAKQRaGkArQhEoGx3GjRvX6KzmI0CAAAECBAgQaEOBlh4D2oYemkSAAAECBAgQINBkAQG0ycCKJ0CAAAECBAgQqBYQQKs9jBEgQIAAAQIECDRZQABtMrDiCRAgQIAAAQIEqgUE0GoPYwQIECBAgAABAk0WEECbDKx4AgQIECBAgACBagEBtNrDGAECBAgQIECAQJMFBNAmAyueAAECBAgQIECgWkAArfYwRoAAAQIECBAg0GQBAbTJwIonQIAAAQIECBCoFhBAqz2MESBAgAABAgQINFlAAG0ysOIJECBAgAABAgSqBQTQag9jBAgQIECAAAECTRYQQJsMrHgCBAgQIECAAIFqAQG02sMYAQIECBAgQIBAkwUE0CYDK54AAQIECBAgQKBaQACt9jBGgAABAgQIECDQZAEBtMnAiidAgAABAgQIEKgWEECrPYwRIECAAAECBAg0WUAAbTKw4gkQIECAAAECBKoFBNBqD2MECBAgQIAAAQJNFhBAmwyseAIECBAgQIAAgWoBAbTawxgBAgQIECBAgECTBQTQJgMrngABAgQIECBAoFpAAK32MEaAAAECBAgQINBkAQG0ycCKJ0CAAAECBAgQqBYYWj1qjAABAp0nMGvWrIYWesGCBQ3NZyYCBAgQ6F1AD2jvPqYSIECAAAECBAjkLCCA5gyqOAIECBAgQIAAgd4FBNDefUwlQIAAAQIECBDIWUAAzRlUcQQIECBAgAABAr0LCKC9+5hKgAABAgQIECCQs4AAmjOo4ggQIECAAAECBHoXEEB79zGVAAECBAgQIEAgZwEBNGdQxREgQIAAAQIECPQuIID27mMqAQIECBAgQIBAzgICaM6giiNAgAABAgQIEOhdQADt3cdUAgQIECBAgACBnAUE0JxBFUeAAAECBAgQINC7gADau4+pBAgQIECAAAECOQsIoDmDKo4AAQIECBAgQKB3AQG0dx9TCRAgQIAAAQIEchYQQHMGVRwBAgQIECBAgEDvAgJo7z6mEiBAgAABAgQI5CwggOYMqjgCBAgQIECAAIHeBQTQ3n1MJUCAAAECBAgQyFlAAM0ZVHEECBAgQIAAAQK9CwigvfuYSoAAAQIECBAgkLPA0JzLa8vidu3alUaOHFmzbUOGDEkxT/wt2zB8+PCsySNGjEg7d+4sW/PT0KFD06BBgzL/sjV+2LBhWZN727baeZlie4/tZqAPea6fvMoaPHhwr59J7bxOYrspc/vL3Pb4rAz/vLbDorezstvH91VZ7fPYbmL7y3PoiAAaaFu3bq3pFkEiAuj27dtrztOuE2KjimHbtm1px44d7drMmu2KdRNtL2N4roT/3ratmgveBhPiyyDsY9sfyEOe6yevsuJ9m1dZRa+7ynu1rO0vs328V8OffdFb/Z/ri+/YMtrH92x83ve37ZVOl7z0OyKABlblQ7MnuHhTV97YPU1v5+cqyxV/K4/bub27t63M9tH2GMroXlkP0fbKclSeG2h/81w/7VpWkeussr3kaVFk+6OuMrc9/Mvc/rK2PdzLah8BNI+2Rxl5Do4BzVNTWQQIECBAgAABAnUFBNC6RGYgQIAAAQIECBDIU0AAzVNTWQQIECBAgAABAnUFBNC6RGYgQIAAAQIECBDIU0AAzVNTWQQIECBAgAABAnUFBNC6RGYgQIAAAQIECBDIU0AAzVNTWQQIECBAgAABAnUFBNC6RGYgQIAAAQIECBDIU0AAzVNTWQQIECBAgAABAnUFOuZOSHUlzECgAwVmzpxZd6kXLFhQdx4zECBAgACBvgjoAe2LlnkJECBAgAABAgT6LSCA9ptQAQQIECBAgAABAn0REED7omVeAgQIECBAgACBfgsIoP0mVAABAgQIECBAgEBfBATQvmiZlwABAgQIECBAoN8CzoLvN6ECCBBoVGDWrFmNzmo+AgQIEBjAAnpAB/DKtWgECBAgQIAAgXYUEEDbca1oEwECBAgQIEBgAAsIoAN45Vo0AgQIECBAgEA7Cgig7bhWtIkAAQIECBAgMIAFnIQ0gFeuRSOQh0CjJw65ZWce2sogQIBAZwjoAe2M9WwpCRAgQIAAAQJtIyCAts2q0BACBAgQIECAQGcICKCdsZ4tJQECBAgQIECgbQQE0LZZFRpCgAABAgQIEOgMAQG0M9azpSRAgAABAgQItI2AANo2q0JDCBAgQIAAAQKdISCAdsZ6tpQECBAgQIAAgbYREEDbZlVoCAECBAgQIECgMwQE0M5Yz5aSAAECBAgQINA2AgJo26wKDSFAgAABAgQIdIaAW3F2xnq2lB0m0OjtMzuMxeISIECAQJsI6AFtkxWhGQQIECBAgACBThEQQDtlTVtOAgQIECBAgECbCAigbbIiNIMAAQIECBAg0CkCAminrGnLSYAAAQIECBBoEwEBtE1WhGYQIECAAAECBDpFwFnwnbKmLScBAv0WyPPqAgsWLOh3exRAgACBsgroAS3rmtNuAgQIECBAgEBJBQTQkq44zSZAgAABAgQIlFVAAC3rmtNuAgQIECBAgEBJBQTQkq44zSZAgAABAgQIlFVAAC3rmtNuAgQIECBAgEBJBQTQkq44zSZAgAABAgQIlFVAAC3rmtNuAgQIECBAgEBJBQTQkq44zSZAgAABAgQIlFVAAC3rmtNuAgQIECBAgEBJBQTQkq44zSZAgAABAgQIlFXArTjLuua0mwCBhgTyvH1mQxWaiQABAgTqCrRFD+j69evTs88+W7exlRmeeeaZtHXr1sqovwQIECBAgAABAiUSaGkP6JYtW9L8+fPTihUr0saNG9NJJ52UZs+enQYNGlST8Mknn0yf/OQn0zve8Y70l3/5lzXnM4EAAQIECBAgQKA9BVoaQO++++60zz77pIsvvjitXbs2XXvttenoo49O06dP71Frx44d6YYbbuhxmicJECBAgAABAgTKIdDSALp48eJ00UUXpWHDhqV99903nXDCCWnRokU1A+hdd92VjjrqqF5312/fvj3t3LmzSj96VHvrVa3M3Mg8lXnb5W+lzY0uY7u0u3s7ytr27vbdl6dTH1c8OnX5+7rcZfcqc/vL3PbYzsrc/jK3vaz2FfPK375+VjVr/pYF0OjNXLNmTZo8eXLXsk2aNCktX768a7z7g2XLlqWlS5emuXPnpocffrj7pKrHV111VXr00Uernhs3blz6+Mc/XvXcQBs56KCDBtoilWZ5DjnkkNK0tZkN5dA33bJ7lb39fVtb7TP3iBEj0tixY9unQR3UkgkTJqT416nDpk2bcl30lgXQOPFo165daeTIkV0LFI97WsA4Qenmm29Ob33rW7Pe0q4X9PAgznjdsGFD1ZToYX366aernus+MmTIkGw0QnHZhuHDh6cI2KtXr96j57cMyxLrJtx377UuQ9tjex0zZkxatWpVGZrb9Db29h5reuUlrKCsXnHY1ODBg7PDpkrInuIzs6wnsY4fPz77vNz9O64s66HM9tFBtnnz5h4zShn847t227Zt/W7q6NGj+11GpYCWBdD44o4hVmhslDFE0Iw32O7DrbfemuLXdnxo/Pa3v80Q42SkqVOnpokTJ1bNfuyxx1aNV0Z27xWtPB9/o/4Iw3msnO7lFvF41KhRWQCNk7jKGKAjxIV7GdseuzNiOy7rl0He2yeHvomW1Ss+c+JHe1nbH+/Z+Lws4xDhPw4zY1/82ouez8ggZbSP76r4ru3L1YZ6Eq5ktZ6m7c1zLQugkcZjN0L0HkUPXgzxuPsu+coCxdnyMe2WW27JnooN4Ac/+EH2IXjKKadUZvOXAAECBAgQIECgBAItC6Bhc+KJJ6aFCxemN77xjdnunAcffDC96U1vytgidMbxoEceeWR629veVkX50Y9+NF1wwQUuw1SlYoQAAQIECBAgUA6Bll6IfubMmdnxFJdeemm6+uqr04tf/OJ0xBFHZHJxTOO8efNK2d1djlWvlQQIECBAgACB1gi0tAc0jsWZM2dOFjIrxxVVGPbff/90zTXXVEar/n7kIx+pGjdCoJME2vXWku3ark7aNiwrAQIEyiLQ0gBaQXJJiYqEvwQIECBAgACBgS/Q0l3wA5/XEhIgQIAAAQIECOwuIIDuLmKcAAECBAgQIECgqQICaFN5FU6AAAECBAgQILC7gAC6u4hxAgQIECBAgACBpgrkchLSlVdemV1l//Wvf32aMmVKUxuscAIECBAgQIAAgXIL5NIDGrcHi4vDH3jggemcc85Jt99+eylva1nuVan1BAgQIECAAIFyCOQSQN/1rnelP/7xj+krX/lKdk/1173udemAAw5I//AP/5AeeuihckhoJQECBAgQIECAQCECuQTQaOmIESPS7Nmz0ze/+c30hz/8IV1++eVp6dKlacaMGem4447L7nS0du3aQhZKJQQIECBAgAABAu0rkFsArSzizp0705IlS7Kez4cffjgLpgcffHCK40QPP/zw9IMf/KAyq78ECBAgQIAAAQIdKJDLSUjhFqHzxhtvTDfffHN6/PHH0/HHH58+9KEPpb/5m79JkyZNStu3b08XXnhheutb35qWL1/egdQWmQABAn0TaPT2pgsWLOhbweYmQIBAiwVyCaDvfe9702c/+9nsDPg3vvGN6aKLLkrPe97zqhZt6NChaebMmenOO+/MjhMdNGhQ1XQjBAgQIECAAAECnSGQSwA95phj0je+8Y306le/Og0bNqym3LnnnpvOO++8JHzWJDKBAAECBAgQIDDgBXIJoHHppeHDh/cYPuPs+BUrVmQnIo0fP37Ag1pAAgQIECBAgACB3gVyOQlp7ty56brrruuxpiuuuCLFdAMBAgQIECBAgACBENjrHtD77rsvu9RSFPKzn/0s3X///Xuc4b5t27YU88V1QQ0ECBAgQIAAAQIEQmCvA+gLX/jCdNBBB2W71wcPHpyGDBmS7Ybvzjp69OjszPcPf/jD3Z/2mAABAgQIECBAoIMF9jqARuicP39+RvfpT386xbU+zz///A6mtOgECBAgQIAAAQKNCOx1AL3hhhuy+73HdT2f+9znZtcB/cQnPtFjnTE9TlQyECBAgAABAgQIEOhXAN24cWN2Yfm77rorffWrX62pGeFTAK3JYwIBAgQIECBAoKME9jqALly4sAtq3rx5Kf4ZCBAgQIAAAQIECNQTyOUyTJVKdu3aVXmY7ZL/1re+lTZv3tz1nAcECBAgQIAAAQIE9roHtDvd1q1b05ve9KY0bdq0dNVVV2XXBH3nO9+ZzXLYYYelBx54ILsffPfXeEyAQLVAo/f9rn6VMQIECBAgUD6BXHpA4z7wsUv+5JNPTjt27Ehx2aVXvepV6cEHH0wTJkxIH/vYx8ono8UECBAgQIAAAQJNEcglgN57773pXe96V3bB+R//+Mdp5cqV6T3veU86/vjj05vf/OasB7QprVcoAQIECBAgQIBA6QRyCaCrV69OU6ZMyRY+jvuMC9D/v//3/7LxLVu2pHHjxpUORoMJECBAgAABAgSaI5BLAD3uuOPSLbfckn7605+muD5oHMs2YsSItHTp0vSlL30pzZw5szmtVyoBAgQIECBAgEDpBHI5Cen9739/OvXUU7Nd7hMnTkxXXHFFBnHiiSemo48+Os2ePbt0MBpMoBGBuMlCI8OCBQsamc08BAgQIECgIwRyCaDPec5z0q9+9avs0kvHHHNMGjNmTIZ35513ZsF00KBBHYFpIQkQIECAAAECBOoL5BJAo5qRI0emF7zgBVU1nnbaaVXjRggQIECAAAECBAjkFkDjTkjf+MY30tq1a7NLMXWnPf3001Ot+8R3n89jAgQIECBAgACBgS+QSwD9/Oc/n12GKXpA45i44cOHV8nFLnoDAQIECBAgQIAAgRDIJYBGz2ecaHTrrbdSJUCAAAECBAgQINCrQC4BNGp43vOe12tFJhLoZAG32ezktd/zstsmenbxLAECnSGQy3VA47abX/va19LOnTs7Q81SEiBAgAABAgQI7LVALj2gL3rRi1KchBTHgMYJR5MnT65qUBwXetZZZ1U9Z4QAAQIECBAgQKAzBXIJoNdff316/PHHM8Fly5btIXnOOecIoHuoeIIAAQIECBAg0JkCuQTQ6667LsU/AwECBAgQIECAAIF6ArkcA9q9khUrVqSHH344e2rLli3dJ3lMgAABAgQIECBAIOUWQL/zne9k933fb7/90tlnn53Rxr3g4+QkAwECBAgQIECAAIGKQC4BdPHixek1r3lNmj59epo7d26l7BQnJ73uda9LCxcu7HrOAwIECBAgQIAAgc4WyCWAXnXVVen888/PLkR/xhlndIl+7nOfS29/+9vTnXfe2fWcBwQIECBAgAABAp0tkEsA/fWvf51OPvnkHiXj0kw/+tGPepzmSQIECBAgQIAAgc4TyCWAHnbYYSlux9nT8NWvfjUdcsghPU3yHAECBAgQIECAQAcK5HIZpre+9a3ZBejf/OY3ZycixR2R4rjPL3/5y+l73/ueXfAduGFZZAIECBAgQIBALYFcAuhpp52W4njP973vfemGG27I6opjQUePHp0+9alPZSco1WqA5wkQIECAAAECBDpLIJcAGmTRC3reeeeln/70p+mxxx5L+++/f3r+85+fpk6d2lmilpYAAQIECBAgQKBXgdwCaNQyfvz49NKXvrTXCk0kQIAAAQIECBDobIG9DqCXXHJJWrp0aUN6sYv+wx/+cEPzmokAAQIECBAgQGBgC+x1AJ04cWKKux5Vhv/8z/9MO3bsSK94xSuy5xctWpQeeOCBNGHChHThhRdWZmvJ3127dqUxY8bUrHvQoEHZtOHDh9ecp10nVNocx9vGyV9lGwYPHpyGDBlStmZn7a3Yl7LxGj2gBHr7fMt7QYcOHZriM7PIOvNchvi8KWvb4/My/Mva/jLbxzY/bNiwUtvH9tOfIbJUnsNeB9CPfexjXe246aab0re+9a20fPnyqmM+V69enR0Hum7duq55W/EgNpyNGzfWrDqCRMBu27at5jztOiFCZxz6sGnTpuwHQLu2s1a7Ro4cmbnHj5eyDf19M5dtebW3fQV6+3zLu9XxYzeCRJF15rkMEd7K2vZx48al7du3l7b9ZbaPTrfICGXcdiIDxXfts88+26+3Ut6dLv2Lw/+3KBFAY5f87iccTZo0Kf393/+9+8H3a5V7MQECBAgQIEBgYAnkEkCjB+6RRx7pUea+++5L06ZN63GaJwkQIECAAAECBDpPIJcAevbZZ6fbb789feYzn0lPPPFE1k39+OOPp09+8pPptttuS6973es6T9YSEyBAgAABAgQI9Ciw18eAdi/tggsuSKtWrUrvec970ty5c7smxQG7n//859P555/f9ZwHBAgQIECAAAECnS2QSwANwjgGNILo4sWL07Jly9JRRx2VZsyYkZ0g09nElp4AAQIECBAgQKC7QG4BNAqdPHlyevnLX579616JxwQIECBAgAABAgQqArkcA1opzF8CBAgQIECAAAEC9QQE0HpCphMgQIAAAQIECOQqIIDmyqkwAgQIECBAgACBegICaD0h0wkQIECAAAECBHIVEEBz5VQYAQIECBAgQIBAPQEBtJ6Q6QQIECBAgAABArkKCKC5ciqMAAECBAgQIECgnoAAWk/IdAIECBAgQIAAgVwFBNBcORVGgAABAgQIECBQT0AArSdkOgECBAgQIECAQK4CAmiunAojQIAAAQIECBCoJyCA1hMynQABAgQIECBAIFcBATRXToURIECAAAECBAjUExBA6wmZToAAAQIECBAgkKuAAJorp8IIECBAgAABAgTqCQig9YRMJ0CAAAECBAgQyFVAAM2VU2EECBAgQIAAAQL1BATQekKmEyBAgAABAgQI5CoggObKqTACBAgQIECAAIF6AgJoPSHTCRAgQIAAAQIEchUQQHPlVBgBAgQIECBAgEA9AQG0npDpBAgQIECAAAECuQoIoLlyKowAAQIECBAgQKCegABaT8h0AgQIECBAgACBXAUE0Fw5FUaAAAECBAgQIFBPQACtJ2Q6AQIECBAgQIBArgICaK6cCiNAgAABAgQIEKgnIIDWEzKdAAECBAgQIEAgVwEBNFdOhREgQIAAAQIECNQTEEDrCZlOgAABAgQIECCQq4AAmiunwggQIECAAAECBOoJCKD1hEwnQIAAAQIECBDIVUAAzZVTYQQIECBAgAABAvUEBNB6QqYTIECAAAECBAjkKiCA5sqpMAIECBAgQIAAgXoCAmg9IdMJECBAgAABAgRyFRBAc+VUGAECBAgQIECAQD2BofVmMJ0AAQIE2ltg1qxZdRu4YMGCuvOYgQABAkUJ6AEtSlo9BAgQIECAAAECmYAAakMgQIAAAQIECBAoVEAALZRbZQQIECBAgAABAgKobYAAAQIECBAgQKBQAQG0UG6VESBAgAABAgQItMVZ8OvXr09Dhw5No0aNqrtGnnnmmTRhwoQ0aNCguvOaofMEnA3ceevcEjcm0Mh7I0pytnxjnuYiQKB/Ai0NoFu2bEnz589PK1asSBs3bkwnnXRSmj17do/h8v7770/f/va305AhQ9K2bdvSqaeemk477bT+Lb1XEyBAgAABAgQIFC7Q0gB69913p3322SddfPHFae3atenaa69NRx99dJo+fXoVxNatW9Ntt92WLrnkknTwwQenp59+Ov3rv/5rmjFjRho3blzVvEYIECBAgAABAgTaW6Clx4AuXrw468kcNmxY2nfffdMJJ5yQFi1atIdYhNMzzjgjC58xMeadOHFi+uUvf7nHvJ4gQIAAAQIECBBob4GW9YDu2LEjrVmzJk2ePLlLaNKkSWn58uVd45UHU6ZMSaeffnplND366KNZL+ihhx7a9VzlwdKlS9OGDRsqo9nf4cOHpwMOOKDque4jcfzprl27UsxXtqHS5tGjR6edO3eWrfkpfnzEvyLbPmbMmFycKva5FKYQAm0iUO/9EZ+XcQx+vfnaZHH2aMaIESP2eK4sTwwePDg7X4J98Wsstvn4riqjfaXtsf2009CyABonHkXoGzlyZJdHPN60aVPXeE8PVq5cmb7whS+ks846K0Uw3X245557soDa/fnYTf/xj3+8+1MD7nH3ID/gFi7nBeppu8m5CsURKK1Ao++PRucrLUSbNjxCUPfvzTZt5oBsVoTPMgbQvFZGvXzW13paFkArK3Hz5s1dPY/PPvtsGj9+fM1liJ7Pz33ucynO5qx1AtK73/3uPXrTIv0/9thjNcuNnqwIw3FyU9mGuHLA1KlT0+OPP56iV7lsQ3yQhnuRbe9tW+iLXxy/bCAw0ATqvT/iEKg4GfSpp54q5aLHd0+c9FrGYdq0adnn5apVq8rY/Cy8ldX+wAMPzPauxiGBZRsiA8V3bWSs/gzx4yf2tuY1tCyAxoKMHTs2xRupciJRPK7Vk/erX/0qffGLX8zOkj/xxBNrLn+t3SsRMGsNMa3yr9Y87fp8ZbnK3P6i214x6+86zauc/rbD6wnkKdDodt3ofHm2LY+yot1lbXtl+cvafvaVNVj833a0b+kBAREkFy5cmKXyJ598Mj344IPZme2xauISTY888kj2ay9+cVx//fXp3HPPTcccc0z2KySO84yz4w0ECBAgQIAAAQLlEmhZD2gwzZw5MwuWl156abZL5yUveUk64ogjMsHVq1enefPmpcsuuyzde++9KXbV33TTTVW6EUhf9rKXVT1nhAABAgQIECBAoL0FWhpA41icOXPmZD2acSxjHFdUGfbff/90zTXXZKNnnnlmin8GAgQIECBAgACB8gu0NIBW+OJYUAMBAgQIlEPguOOOa6ihbuvZEJOZCHSkQEuPAe1IcQtNgAABAgQIEOhwAQG0wzcAi0+AAAECBAgQKFpAAC1aXH0ECBAgQIAAgQ4XEEA7fAOw+AQIECBAgACBogUE0KLF1UeAAAECBAgQ6HCBtjgLvsPXgcUvWCBu5WogQKD5Anm+15xR3/z1pQYCRQroAS1SW10ECBAgQIAAAQJJALURECBAgAABAgQIFCoggBbKrTICBAgQIECAAAEB1DZAgAABAgQIECBQqIAAWii3yggQIECAAAECBARQ2wABAgQIECBAgEChAgJoodwqI0CAAAECBAgQEEBtAwQIECBAgAABAoUKCKCFcquMAAECBAgQIEBAALUNECBAgAABAgQIFCoggBbKrTICBAgQIECAAAEB1DZAgAABAgQIECBQqIAAWii3yggQIECAAAECBARQ2wABAgQIECBAgEChAgJoodwqI0CAAAECBAgQEEBtAwQIECBAgAABAoUKCKCFcquMAAECBAgQIEBAALUNECBAgAABAgQIFCoggBbKrTICBAgQIECAAAEB1DZAgAABAgQIECBQqIAAWii3yggQIECAAAECBIYiIECAAAECFYFZs2ZVHvpLgACBpgnoAW0arYIJECBAgAABAgR6EhBAe1LxHAECBAgQIECAQNMEBNCm0SqYAAECBAgQIECgJwEBtCcVzxEgQIAAAQIECDRNQABtGq2CCRAgQIAAAQIEehIQQHtS8RwBAgQIECBAgEDTBATQptEqmAABAgQIECBAoCcBAbQnFc8RIECAAAECBAg0TUAAbRqtggkQIECA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1/nadWKZ7cM9tv199923XXl7bVe8V3fs2NHrPO06ce3atdl7duLEie3axF7bVWb71atXp6FDh6Zx48b1uoztOrHM9itXrkyjRo1KY8eObVfeXtuVx+f9sGHD0uTJk3utpy8Th/Zl5jLPO23atDI3v2bblyxZkr7whS+kyy67LJX1C6HmwrX5hB/+8Ifp61//err66qvbvKUDr3n33XdfWrx4cfroRz868BauzZfonnvuyX54zZkzp81bOvCad+ONN6apU6emCy+8cOAtXJsv0TXXXJNe/OIXp9e85jVt3tLyNM8u+PKsKy0lQIAAAQIECAwIAQF0QKxGC0GAAAECBAgQKI+AAFqedaWlBAgQIECAAIEBISCADojVaCEIECBAgAABAuURGHLpn4byNFdLdxeIs9LiLOznPOc52dmRu0833jyB4cOHpwMPPDAdfPDBzatEyT0KjBw5Mv3FX/xFOuCAA3qc7snmCcSZwIccckhpr/7QPJnmlzxmzJh06KGH5nomcvNbPTBq2GeffdLhhx+exo8fPzAWqA2WomMuw9QG1ppAgAABAgQIECDwJwG74G0GBAgQIECAAAEChQoIoIVyq4wAAQIECBAgQEAALfk2EHeDiTuTGFojEHdxWrFiRWsq79Bat27dmrr/K+sdhcq6+jZs2JA2btxY1uaXst3xOb/7v3gPGIoTiDsOGvIV6Jg7IeXL1h6l3XzzzWnp0qUpbrE1YcKE9Pa3v720twlrD9G+t+L73/9++va3v52uvPLKvr/YK/osEGH/8ssvr3rdK17xivTqV7+66jkj+Qts3rw53XDDDen3v/99VnicAPa2t70txYmQhuYJPPvss+n973//HhXEbWg/8pGP7PG8J/IV+MUvfpFuv/32FLfsjtt1x52QjjvuuHwr6dDSBNCSrvi4DeFvf/vb7AMo7q97/fXXpwULFqTZs2eXdInK1+zHH388M48PJkMxAmF+2GGHpUsuuaSrwtj+Dc0X+O53v5v1PMftT+OLeN68eSluifqSl7yk+ZV3cA1x1YFPf/rTXQLbtm1Ln/rUp9Lpp5/e9ZwHzRP45je/mf3A/eu//uusw+c//uM/0vOe97ys46d5tXZGyXbBl3Q977///ulv//Zvs0svRQCKS0OsX7++pEtTvmbHl8C///u/uy9wwasuAmhc9iougRXBs/K34GZ0ZHX3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EejLvaBHjRqV4t/cuXNT3E9693+f/OQns8V+wxvekO2yv/LKK9P//u//pieeeCLF8aIxdA+g2RO9/BeBM05SikD79a9/Pc2aNStFHZ/97Gd7eZVJBAgQKF5AAC3eXI0ECHSIwKBBg9IxxxyTbrnllmyJYzz+/frXv04vf/nL03333ZedlLRw4cLsbPq3v/3tXbvV4ySmGCq9m9lIL/9t3rw5xW73qGvs2LHpta99bfY4jhd96KGHenmlSQQIECheQAAt3lyNBAh0kEBcOun3v/99dnmkOEM+wmCcxb5y5cr0ghe8IDt+9EUvelHWA/rYY4+ldevWZbvS47JOMcRu/EaGkSNHpthFH/V997vfzXblR2/ob37zm3Tqqac2UoR5CBAgUJiAAFoYtYoIEOhEgTijff78+enOO+/MLsUUJyTFGetf+tKXsuM1w+Syyy7LaA499NDsbPUbMFLqagAAAURJREFUbrgh/fCHP8yO27z//vsbZvvIRz6SXZ80zrCP64D+3d/9XXZJpriEk4EAAQLtJOA6oO20NrSFAIEBLfC73/0u66WM40J7GuJaonHJpjiWsz9D7LaPug455JDsbPv+lOW1BAgQaIaAANoMVWUSIECAAAECBAjUFLALviaNCQQIECBAgAABAs0QEECboapMAgQIECBAgACBmgICaE0aEwgQIECAAAECBJohIIA2Q1WZBAgQIECAAAECNQUE0Jo0JhAgQIAAAQIECDRDQABthqoyCRAgQIAAAQIEagoIoDVpTCBAgAABAgQIEGiGgADaDFVlEiBAgAABAgQI1BQQQGvSmECAAAECBAgQINAMAQG0GarKJECAAAECBAgQqCkggNakMYEAAQIECBAgQKAZAgJoM1SVSYAAAQIECBAgUFPg/wMfqfTUpoIGbwAAAABJRU5ErkJggg==" /></p>
 </div>
+<div id="sample-mean-versus-theoretical-mean" class="section level2">
+<h2>Sample Mean versus Theoretical Mean</h2>
+<p>The expected mean <span class="math">\(μ\)</span> of a exponential distribution of rate <span class="math">\(λ\)</span> is</p>
+<p><span class="math">\(μ = \frac{1}{λ}\)</span></p>
+<pre class="r"><code>μ &lt;- 1/λ
+μ</code></pre>
+<pre><code>## [1] 5</code></pre>
+<p>Let <span class="math">\(\bar X\)</span> be the average sample mean of 1000 simulations of 40 randomly sampled exponential distributions.</p>
+<pre class="r"><code>meanOfMeans &lt;- mean(exponentialDistributionMeans$means)
+meanOfMeans</code></pre>
+<pre><code>## [1] 5.010255</code></pre>
+<p>As you can see the expected mean and the avarage sample mean are very close</p>
+<pre class="r"><code>round(abs(meanOfMeans - μ), 3)</code></pre>
+<pre><code>## [1] 0.01</code></pre>
 </div>
-<div id="question-9" class="section level2">
-<h2>Question 9</h2>
-<p>As you increase the type one error rate, α, what happens to power?</p>
-<div id="answer-8" class="section level3">
-<h3>Answer</h3>
-<ul>
-<li>It’s impossible to tell given the information in the problem.</li>
-<li>You will get smaller power.</li>
-<li><strong>You will get larger power.</strong></li>
-<li>No, for real, where does Brian come up with these problems?</li>
-</ul>
+<div id="sample-variance-versus-theoretical-variance" class="section level2">
+<h2>Sample Variance versus Theoretical Variance</h2>
+<p>The expected standard deviation <span class="math">\(σ\)</span> of a exponential distribution of rate <span class="math">\(λ\)</span> is</p>
+<p><span class="math">\(σ = \frac{\frac{1}{λ}}{\sqrt{n}}\)</span></p>
+<p>Let <span class="math">\(Var_x\)</span> be the variance of the average sample mean of 1000 simulations of 40 randomly sampled exponential distributions.</p>
 </div>
+<div id="distribution" class="section level2">
+<h2>Distribution</h2>
+<p>Illustrate via simulation and associated explanatory text the properties of the distribution of the mean of 40 exponentials. You should 1. Show the sample mean and compare it to the theoretical mean of the distribution. 2. Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution. 3. Show that the distribution is approximately normal.</p>
 </div>
 </div>
 
