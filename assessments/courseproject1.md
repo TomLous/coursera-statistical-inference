@@ -1,6 +1,8 @@
 Tom Lous  
 2 Feb 2015  
 
+
+
 # Statistical Inference Course Project
 
 ## Overview
@@ -19,20 +21,14 @@ n <- 40 # number of exponetials
 numberOfSimulations <- 1000 # number of tests
 
 # set the seed to create reproducability
-set.seed(19790811)
+set.seed(11081979)
 
 # run the test resulting in n x numberOfSimulations matrix
 exponentialDistributions <- matrix(data=rexp(n * numberOfSimulations, λ), nrow=numberOfSimulations)
 exponentialDistributionMeans <- data.frame(means=apply(exponentialDistributions, 1, mean))
-
-# plot the means
-ggplot(data = exponentialDistributionMeans, aes(x = means)) + 
-  geom_histogram(binwidth=0.1, aes(y = ..density..)) + 
-  #geom_density(colour="red", size=0.8, fill="red", alpha=0.1) +
-  scale_x_continuous(breaks=round(seq(min(exponentialDistributionMeans$means), max(exponentialDistributionMeans$means), by=1)))
 ```
 
-![](courseproject_files/figure-html/unnamed-chunk-1-1.png) 
+![](courseproject1_files/figure-html/unnamed-chunk-2-1.png) 
 
 ## Sample Mean versus Theoretical Mean
 
@@ -59,32 +55,71 @@ meanOfMeans
 ```
 
 ```
-## [1] 5.010255
+## [1] 5.027126
 ```
 
 As you can see the expected mean and the avarage sample mean are very close 
 
-```r
-round(abs(meanOfMeans - μ), 3)
-```
-
-```
-## [1] 0.01
-```
 
 ## Sample Variance versus Theoretical Variance
 
 The expected standard deviation $σ$ of a exponential distribution of rate $λ$ is 
 
-$σ = \frac{\frac{1}{λ}}{\sqrt{n}}$ 
+$σ = \frac{1/λ}{\sqrt{n}}$ 
+
+The e
 
 
-Let $Var_x$ be the variance of the average sample mean of 1000 simulations of 40 randomly sampled exponential distributions.
+```r
+σ <- 1/λ/sqrt(n)
+σ
+```
+
+```
+## [1] 0.7905694
+```
+
+The variance $Var$ of standard deviation $σ$ is
+
+$Var = σ^2$ 
 
 
+```r
+Var <- σ^2
+Var
+```
+
+```
+## [1] 0.625
+```
+
+Let $Var_x$ be the variance of the average sample mean of 1000 simulations of 40 randomly sampled exponential distribution, and $σ_x$ the corresponding standard deviation.
+
+```r
+σ_x <- sd(exponentialDistributionMeans$means)
+σ_x
+```
+
+```
+## [1] 0.8020334
+```
+
+```r
+Var_x <- var(exponentialDistributionMeans$means)
+Var_x
+```
+
+```
+## [1] 0.6432577
+```
+
+As you can see the standard deviations are very close
+Since variance is the square of the standard deviations, minor differnces will we enhanced, but are still pretty close.
 
 ## Distribution
-Illustrate via simulation and associated explanatory text the properties of the distribution of the mean of 40 exponentials.  You should
-1. Show the sample mean and compare it to the theoretical mean of the distribution.
-2. Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
-3. Show that the distribution is approximately normal.
+
+Comparing the population means & standard deviation with a normal distribution of the expected values. Added lines for the calculated and expected means
+
+![](courseproject1_files/figure-html/unnamed-chunk-8-1.png) 
+
+As you can see from the graph, the calculated distribution of means of random sampled exponantial distributions, overlaps quite nice with the normal distribution with the expected values based on the given lamba
