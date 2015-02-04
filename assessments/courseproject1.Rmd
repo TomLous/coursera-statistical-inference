@@ -1,10 +1,8 @@
 ---
-author: "Tom Lous"
-date: "2 Feb 2015"
 output:
+  pdf_document: default
   html_document:
     keep_md: yes
-  pdf_document: default
 ---
 
 ```{r global_options, include=FALSE}
@@ -12,7 +10,7 @@ library(knitr)
 opts_chunk$set(fig.width=7, fig.height=4, warning=FALSE, message=FALSE)
 ```
 
-# Statistical Inference Course Project
+# Statistical Inference Course Project 1
 
 ## Overview
 In this project I will investigate the exponential distribution in R and compare it with the Central Limit Theorem. The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. I will set lambda = 0.2 for all of the simulations. I will investigate the distribution of averages of 40 exponentials. Note that I will need to do a thousand simulations.
@@ -24,7 +22,7 @@ In this project I will investigate the exponential distribution in R and compare
 library(ggplot2)
 
 # set constants
-λ <- 0.2 # lambda for rexp
+lambda <- 0.2 # lambda for rexp
 n <- 40 # number of exponetials
 numberOfSimulations <- 1000 # number of tests
 
@@ -32,7 +30,7 @@ numberOfSimulations <- 1000 # number of tests
 set.seed(11081979)
 
 # run the test resulting in n x numberOfSimulations matrix
-exponentialDistributions <- matrix(data=rexp(n * numberOfSimulations, λ), nrow=numberOfSimulations)
+exponentialDistributions <- matrix(data=rexp(n * numberOfSimulations, lambda), nrow=numberOfSimulations)
 exponentialDistributionMeans <- data.frame(means=apply(exponentialDistributions, 1, mean))
 ```
 
@@ -45,13 +43,13 @@ ggplot(data = exponentialDistributionMeans, aes(x = means)) +
 
 ## Sample Mean versus Theoretical Mean
 
-The expected mean $μ$ of a exponential distribution of rate $λ$ is 
+The expected mean $\mu$ of a exponential distribution of rate $\lambda$ is 
 
-$μ = \frac{1}{λ}$ 
+$\mu= \frac{1}{\lambda}$ 
 
 ```{r}
-μ <- 1/λ
-μ
+mu <- 1/lambda
+mu
 ```
 
 Let $\bar X$ be the average sample mean of 1000 simulations of 40 randomly sampled exponential distributions.
@@ -66,30 +64,30 @@ As you can see the expected mean and the avarage sample mean are very close
 
 ## Sample Variance versus Theoretical Variance
 
-The expected standard deviation $σ$ of a exponential distribution of rate $λ$ is 
+The expected standard deviation $\sigma$ of a exponential distribution of rate $\lambda$ is 
 
-$σ = \frac{1/λ}{\sqrt{n}}$ 
+$\sigma = \frac{1/\lambda}{\sqrt{n}}$ 
 
 The e
 
 ```{r}
-σ <- 1/λ/sqrt(n)
-σ
+sd <- 1/lambda/sqrt(n)
+sd
 ```
 
-The variance $Var$ of standard deviation $σ$ is
+The variance $Var$ of standard deviation $\sigma$ is
 
-$Var = σ^2$ 
+$Var = \sigma^2$ 
 
 ```{r}
-Var <- σ^2
+Var <- sd^2
 Var
 ```
 
-Let $Var_x$ be the variance of the average sample mean of 1000 simulations of 40 randomly sampled exponential distribution, and $σ_x$ the corresponding standard deviation.
+Let $Var_x$ be the variance of the average sample mean of 1000 simulations of 40 randomly sampled exponential distribution, and $\sigma_x$ the corresponding standard deviation.
 ```{r}
-σ_x <- sd(exponentialDistributionMeans$means)
-σ_x
+sd_x <- sd(exponentialDistributionMeans$means)
+sd_x
 
 Var_x <- var(exponentialDistributionMeans$means)
 Var_x
@@ -106,11 +104,11 @@ Comparing the population means & standard deviation with a normal distribution o
 # plot the means
 ggplot(data = exponentialDistributionMeans, aes(x = means)) + 
   geom_histogram(binwidth=0.1, aes(y=..density..), alpha=0.2) + 
-  stat_function(fun = dnorm, arg = list(mean = μ , sd = σ), colour = "red", size=1) + 
-  geom_vline(xintercept = μ, size=1, colour="#CC0000") + 
+  stat_function(fun = dnorm, arg = list(mean = mu , sd = sd), colour = "red", size=1) + 
+  geom_vline(xintercept = mu, size=1, colour="#CC0000") + 
   geom_density(colour="blue", size=1) +
   geom_vline(xintercept = meanOfMeans, size=1, colour="#0000CC") + 
-  scale_x_continuous(breaks=seq(μ-3,μ+3,1), limits=c(μ-3,μ+3)) 
+  scale_x_continuous(breaks=seq(mu-3,mu+3,1), limits=c(mu-3,mu+3)) 
 ```
 
 As you can see from the graph, the calculated distribution of means of random sampled exponantial distributions, overlaps quite nice with the normal distribution with the expected values based on the given lamba

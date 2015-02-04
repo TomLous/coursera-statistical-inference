@@ -1,0 +1,101 @@
+---
+output:
+  html_document:
+    keep_md: yes
+  pdf_document: default
+---
+
+```{r global_options, include=FALSE}
+library(knitr)
+opts_chunk$set(fig.width=10, fig.height=8, warning=FALSE, message=FALSE)
+```
+
+# Statistical Inference Course Project 2
+
+## Overview
+Load the ToothGrowth data and perform some basic exploratory data analyses 
+- Provide a basic summary of the data.
+- Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
+- State your conclusions and the assumptions needed for your conclusions. 
+
+
+## Load Data
+
+```{r}
+# load neccesary libraries
+library(ggplot2)
+library(datasets)
+library(gridExtra)
+library(GGally)
+
+# The Effect of Vitamin C on Tooth Growth in Guinea Pigs
+data(ToothGrowth)
+toothGrowth <- ToothGrowth 
+toothGrowth$dose <- as.factor(toothGrowth$dose) # convert to factor
+```
+
+
+## Basic Summary of the data
+```{r}
+str(toothGrowth)
+summary(toothGrowth)
+head(toothGrowth)
+
+table(toothGrowth$supp, toothGrowth$dose)
+```
+```{r echo=FALSE}
+p1 <- ggplot(data=toothGrowth, aes(x=dose,y=len,fill=dose)) +
+  geom_boxplot() + 
+  theme(legend.position="none") + 
+  facet_grid(.~supp) 
+
+p2 <- ggplot(data=toothGrowth, aes(x=supp,y=len,fill=supp)) +
+  geom_boxplot() + 
+  theme(legend.position="none") + 
+  facet_grid(.~dose) 
+
+p3 <- ggplot(data=toothGrowth, aes(x=supp,y=len,fill=supp)) +
+  geom_boxplot()
+
+p4 <- ggplot(data=toothGrowth, aes(x=dose,y=len,fill=dose)) +
+  geom_boxplot()
+
+grid.arrange(p1, p4, p2, p3, ncol = 2, nrow=2)
+
+#ggpairs(toothGrowth, 
+#        upper = list(continuous = "density", combo = "box"),
+#        lower = list(continuous="smooth"),        
+#        colour = "dose",
+#        axisLabels='show')
+```
+
+Do some analysis based on Analysis of Variance (ANOVA)
+```{r}
+anova.out <- aov(len ~ supp * dose, data=toothGrowth)
+summary(anova.out)
+```
+
+The results show there is a notable interaction between the length (len) and dosage (dose) (F(1,54)=15.572;p<0.01)
+Also a very clear effect on length(len) by supplement type (supp) (F(2,54)=92;p<0.01). 
+Last but not least there is a minor interaction between the combination of supplement type (supp) and dosage (dose) compared to the length (len) (F(2,54)=4.107;p<0.05).
+
+```{r}
+TukeyHSD(anova.out)
+```
+
+The Tukey HSD  analysis shows that there are significant differences between each of the groups in supp and dose
+Only the interactions between VC:0.5-OJ:0.5; VC:1-OJ:0.5; OJ:2-OJ:1; VC:2-OJ:1 and VC:2-OJ:2  are not significant
+```{r}
+confint(anova.out)
+print(model.tables(anova.out,"means"),digits=3)
+```
+
+## Conclusions
+
+There are clear indications that both the supplement as the dosage have clear indipendent effects on the length of teeth guinea pigs. More those means on avarage longer teeth. Supplement type has a clear influence too, but OJ has a greater avarage teethgrowth in combination with dosages 0.5 and 1 then for the VC supplement, while teeth length for the VC supplement vs the OJ in combiantion with dosage 2 has no significant effect (almost same mean & same confidence interval)
+
+The fact remains however that these assumpionts are based on the facts:
+
+* that the guinea pigs are repesentative for the population of guinea pigs, 
+* that dosage and supplement were randomly assigned and 
+* that the distribution of the means is normal.
